@@ -12,5 +12,5 @@ INSTALL=1 sh ./install.sh
 ```
 
 # NOTE
-- user / password / hostname will be both `box`.
+- username (sudo-ed) / password / hostname: all are `box`.
 - timezone is set to Asia/Shanghai.
