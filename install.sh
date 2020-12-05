@@ -3,7 +3,11 @@
 # # Intro
 # Install archlinux as a guest (qemu / VirtualBox ...) with a script.
 #
-# **WARNING: /dev/sda will be eraised! (if `env INSTALL=1` is passed in)**
+# **WARNING: /dev/sda (and /dev/sdb if it exists) will be eraised! (if `env
+# INSTALL=1` is passed in)**
+#
+# When /dev/sdb is available, /dev/sda (/dev/sda1) will be mounted as /boot,
+# and /dev/sdb will be used as super block (no partition, easier to resize).
 #
 # # Usage
 # In archlinux iso session, download this script; then:
@@ -30,7 +34,14 @@ set -x
 
 printf 'o\nn\n\n\n\n\nw\n' | fdisk /dev/sda
 mkfs.ext4 /dev/sda1
-mount /dev/sda1 /mnt
+if [ -e /dev/sdb ]; then
+    mkfs.ext4 /dev/sdb
+    mount /dev/sdb /mnt
+    mkdir /mnt/boot
+    mount /dev/sda1 /mnt/boot
+else
+    mount /dev/sda1 /mnt
+fi
 printf 'Server = https://mirrors.aliyun.com/archlinux/$repo/os/$arch\n' > /etc/pacman.d/mirrorlist
 pacstrap /mnt base linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab

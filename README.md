@@ -1,7 +1,11 @@
 # Intro
 Install archlinux as a guest (qemu / VirtualBox ...) with a script.
 
-**WARNING: /dev/sda will be eraised! (if `env INSTALL=1` is passed in)**
+**WARNING: /dev/sda (and /dev/sdb if it exists) will be eraised! (if `env
+INSTALL=1` is passed in)**
+
+When /dev/sdb is available, /dev/sda (/dev/sda1) will be mounted as /boot,
+and /dev/sdb will be used as super block (no partition, easier to resize).
 
 # Usage
 In archlinux iso session, download this script; then:
