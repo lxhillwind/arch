@@ -67,6 +67,8 @@ printf 'box\nbox\n' | passwd box
 systemctl enable dhcpcd
 grub-install --target=i386-pc /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
+timedatectl set-ntp true
+systemctl enable systemd-timesyncd
 EOF
 umount -R /mnt
 reboot
