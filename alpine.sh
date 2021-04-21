@@ -65,7 +65,8 @@ cp /etc/resolv.conf mnt/etc/
 cp etc/apk/repositories mnt/etc/apk/
 PATH=/bin:/sbin:/usr/sbin:"$PATH" \
 arch-chroot ./mnt /bin/sh -s <<\EOF
-apk add linux-virt grub grub-bios sudo
+# e2fsprogs: fsck at startup
+apk add linux-virt grub grub-bios sudo e2fsprogs
 
 # required to fix sysroot mount.
 echo 'GRUB_CMDLINE_LINUX_DEFAULT=" rootfstype=ext4"' >> /etc/default/grub
@@ -89,9 +90,10 @@ printf '\
 127.0.1.1 box.localdomain box
 ' > /etc/hosts
 
-rc-update add localmount boot
+rc-update add localmount boot  # otherwise fs is mount readonly
 rc-update add hostname boot  # hostname is required for networking
 rc-update add networking boot
+rc-update add mount-ro shutdown  # avoid inconsistent shutdown
 EOF
 
 # >, not >> here.
