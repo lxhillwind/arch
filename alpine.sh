@@ -84,8 +84,8 @@ printf 'box\nbox\n' | passwd
 printf 'auto lo\niface lo inet loopback\nauto eth0\niface eth0 inet dhcp\n' > /etc/network/interfaces
 
 printf 'box\n' > /etc/hostname
-printf '\
-127.0.0.1 localhost
+printf \
+'127.0.0.1 localhost
 ::1 localhost
 127.0.1.1 box.localdomain box
 ' > /etc/hosts
@@ -93,6 +93,7 @@ printf '\
 rc-update add localmount boot  # otherwise fs is mount readonly
 rc-update add hostname boot  # hostname is required for networking
 rc-update add networking boot
+rc-update add ntpd
 rc-update add mount-ro shutdown  # avoid inconsistent shutdown
 EOF
 

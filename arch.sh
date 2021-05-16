@@ -54,8 +54,8 @@ sed -i -r 's/^.*(en_US.UTF-8 UTF-8)$/\1/' /etc/locale.gen
 locale-gen
 printf 'LANG=en_US.UTF-8\n' > /etc/locale.conf
 printf 'box\n' > /etc/hostname
-printf '\
-127.0.0.1 localhost
+printf \
+'127.0.0.1 localhost
 ::1 localhost
 127.0.1.1 box.localdomain box
 ' > /etc/hosts
