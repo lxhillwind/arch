@@ -25,12 +25,14 @@ INSTALL=1 sh ./install.sh
 - In VirtualBox, network adapter should be virtio-net.
 '
 
-minirootfs_url='https://mirrors.bfsu.edu.cn/alpine/latest-stable/releases/x86_64/alpine-minirootfs-3.13.5-x86_64.tar.gz'
-
 if [ "$INSTALL" != 1 ]; then
     printf "%s" "$HELP"
     exit 0
 fi
+
+alpine_version=$(curl -Ls https://mirrors.bfsu.edu.cn/alpine/latest-stable/releases/x86_64/latest-releases.yaml | \
+    grep version: | awk '{ print $2 }' | head -n 1)
+minirootfs_url="https://mirrors.bfsu.edu.cn/alpine/latest-stable/releases/x86_64/alpine-minirootfs-${alpine_version}-x86_64.tar.gz"
 
 set -x
 
@@ -54,7 +56,8 @@ else
 fi
 
 tar xf "${minirootfs_url##*/}"
-sed -i s/dl-cdn.alpinelinux.org/mirrors.bfsu.edu.cn/ etc/apk/repositories
+echo 'https://mirrors.bfsu.edu.cn/alpine/latest-stable/main
+https://mirrors.bfsu.edu.cn/alpine/latest-stable/community' > etc/apk/repositories
 cp /etc/resolv.conf etc/
 PATH=/bin:/sbin:/usr/sbin:"$PATH" \
 arch-chroot ./ /bin/sh -s <<\EOF
